@@ -14,7 +14,10 @@ class FreeHandDrawImageView: UIImageView {
     private var shapeLayer = CAShapeLayer()
     private var shapePath=UIBezierPath()
     
+    private var isFirstTap:Bool=false
     // MARK: - Public properties
+    
+    var zoomScale:CGFloat=1
     
     var strokeWidth: CGFloat = 4 {
         willSet {
@@ -58,34 +61,76 @@ class FreeHandDrawImageView: UIImageView {
         
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan(gesture:)))
         panGesture.maximumNumberOfTouches = 1
-        panGesture.minimumNumberOfTouches = 1
         
         addGestureRecognizer(panGesture)
         
         isUserInteractionEnabled = true
     }
     
+    override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        
+        lastPoint=gestureRecognizer.location(in: self)
+        print(lastPoint)
+        super.gestureRecognizerShouldBegin(gestureRecognizer)
+        return true
+    }
+    
+    
     @objc private func handlePan(gesture: UIPanGestureRecognizer) {
         let location = gesture.location(in: self)
+        let translation = gesture.translation(in: self)
+        print(translation)
         
         switch gesture.state {
         case .began:
             lastPoint = location
+            print(lastPoint)
+            gesture.setTranslation(CGPoint.zero, in: self)
         case .changed:
-            drawLine(fromPoint: location, toPoint: lastPoint!)
+//            if !isFirstTap {
+//                let firstPoint = calculateFirstDrawPosition(usingTranslation: translation)
+//                drawLine(fromPoint: firstPoint, toPoint: lastPoint!)
+//                isFirstTap=true
+//            }
+    
+            drawLine(fromPoint: lastPoint!, toPoint:location)
+            gesture.setTranslation(CGPoint.zero, in: self)
             lastPoint = location
         case .ended:
-            drawLine(fromPoint: location, toPoint: lastPoint!)
+            drawLine(fromPoint: lastPoint!, toPoint: location)
+            isFirstTap=false
         default:
-            print("canceled")
+          print("cancel")
+          isFirstTap=false
         }
+    }
+    
+    func calculateFirstDrawPosition(usingTranslation translation:CGPoint, overTime time:TimeInterval=4)->CGPoint{
+        var x:CGFloat=0
+        var y:CGFloat=0
+        
+        if translation.x>0.5{
+            x = translation.x*CGFloat(time)
+        }else {
+            x = translation.x*CGFloat(time)+0.5*CGFloat(time)
+        }
+        
+        if translation.y>0.5{
+            y = translation.y*CGFloat(time)
+        }else {
+            y = translation.y*CGFloat(time)+0.5*CGFloat(time)
+        }
+       
+        
+        print("\(x) and \(y)")
+        return CGPoint(x: lastPoint!.x-x, y: lastPoint!.y-y)
     }
     
     private func drawLine(fromPoint: CGPoint, toPoint: CGPoint) {
         
        
-        shapePath.move(to: toPoint)
-        shapePath.addLine(to: fromPoint)
+        shapePath.move(to:fromPoint)
+        shapePath.addLine(to:toPoint)
         
         //transfer path to layer
         shapeLayer.path=shapePath.cgPath

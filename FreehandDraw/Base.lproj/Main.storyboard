@@ -34,7 +34,7 @@
                                     <constraint firstItem="1qt-hE-NBw" firstAttribute="leading" secondItem="hTV-I4-She" secondAttribute="leading" id="MKj-zb-tKL"/>
                                     <constraint firstAttribute="height" secondItem="1qt-hE-NBw" secondAttribute="height" id="VLN-2j-rnn"/>
                                     <constraint firstAttribute="trailing" secondItem="1qt-hE-NBw" secondAttribute="trailing" id="dHb-LY-JRx"/>
-                                    <constraint firstAttribute="bottom" secondItem="1qt-hE-NBw" secondAttribute="bottom" constant="-295" id="ea4-5S-e6G"/>
+                                    <constraint firstAttribute="bottom" secondItem="1qt-hE-NBw" secondAttribute="bottom" id="ea4-5S-e6G"/>
                                     <constraint firstItem="1qt-hE-NBw" firstAttribute="top" secondItem="hTV-I4-She" secondAttribute="top" id="wm0-aH-B2s"/>
                                 </constraints>
                             </scrollView>
