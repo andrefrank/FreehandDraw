@@ -26,7 +26,7 @@ class ViewController: UIViewController,UIScrollViewDelegate {
     
     @IBAction func redrawImage(_ sender: Any) {
         
-        let image = imageView.screenShot
+        let image = imageView.snapshot
         imageView.strokeColor = .white
         imageView.strokeWidth = 10
     }

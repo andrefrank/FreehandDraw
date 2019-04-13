@@ -102,17 +102,21 @@ class FreeHandDrawImageView: UIImageView {
     }
 }
 
-// MARK: - Snapshoot extension method for this View
+// MARK: - Extension for getting a snapshot of the UIImageView
 
-extension UIView {
-    var screenShot: UIImage? {
+extension UIImageView {
+    var snapshot: UIImage? {
+        //Get scale
         let scale = UIScreen.main.scale
+        //Create a bitmap using frame size
         UIGraphicsBeginImageContextWithOptions(layer.frame.size, false, scale)
+        
         if let context = UIGraphicsGetCurrentContext() {
             layer.render(in: context)
-            let screenshot = UIGraphicsGetImageFromCurrentImageContext()
+            
+            let image = UIGraphicsGetImageFromCurrentImageContext()
             UIGraphicsEndImageContext()
-            return screenshot
+            return image
         }
         return nil
     }
