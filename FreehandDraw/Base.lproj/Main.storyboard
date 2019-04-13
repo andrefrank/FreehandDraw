@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13122.16" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="KFi-UN-3bo">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13104.12"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -9,16 +13,77 @@
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="BYZ-38-t0r" customClass="ViewController" customModule="FreehandDraw" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFill" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hTV-I4-She">
+                                <rect key="frame" x="0.0" y="114" width="375" height="353"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="manhatten.png" translatesAutoresizingMaskIntoConstraints="NO" id="1qt-hE-NBw" customClass="FreeHandDrawImageView" customModule="FreehandDraw" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="353"/>
+                                        <accessibility key="accessibilityConfiguration">
+                                            <accessibilityTraits key="traits" none="YES"/>
+                                            <bool key="isElement" value="YES"/>
+                                        </accessibility>
+                                    </imageView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="1qt-hE-NBw" secondAttribute="width" id="J2F-rw-za9"/>
+                                    <constraint firstItem="1qt-hE-NBw" firstAttribute="leading" secondItem="hTV-I4-She" secondAttribute="leading" id="MKj-zb-tKL"/>
+                                    <constraint firstAttribute="height" secondItem="1qt-hE-NBw" secondAttribute="height" id="VLN-2j-rnn"/>
+                                    <constraint firstAttribute="trailing" secondItem="1qt-hE-NBw" secondAttribute="trailing" id="dHb-LY-JRx"/>
+                                    <constraint firstAttribute="bottom" secondItem="1qt-hE-NBw" secondAttribute="bottom" constant="-295" id="ea4-5S-e6G"/>
+                                    <constraint firstItem="1qt-hE-NBw" firstAttribute="top" secondItem="hTV-I4-She" secondAttribute="top" id="wm0-aH-B2s"/>
+                                </constraints>
+                            </scrollView>
+                        </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="hTV-I4-She" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="EbH-RB-sBu"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="hTV-I4-She" secondAttribute="bottom" constant="200" id="W3t-3c-p7A"/>
+                            <constraint firstItem="hTV-I4-She" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="50" id="YlP-O2-faf"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="hTV-I4-She" secondAttribute="trailing" id="lGc-VF-yFh"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
+                    <navigationItem key="navigationItem" id="v1a-IV-JbN">
+                        <barButtonItem key="rightBarButtonItem" title="Redraw" id="j2V-zY-J30">
+                            <connections>
+                                <action selector="redrawImage:" destination="BYZ-38-t0r" id="SCS-PS-sJ2"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="imageView" destination="1qt-hE-NBw" id="ytN-cl-5O8"/>
+                        <outlet property="scrollView" destination="hTV-I4-She" id="ULq-kj-0WD"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="1040.8" y="128.18590704647679"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="L2d-2c-yqQ">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="KFi-UN-3bo" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="DIn-xJ-jcA">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="ZoY-XR-Zko"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="hyy-Lf-Lpe" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="131.8840579710145" y="128.57142857142856"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="manhatten.png" width="765" height="541"/>
+    </resources>
 </document>
