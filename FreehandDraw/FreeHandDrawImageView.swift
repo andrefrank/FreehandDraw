@@ -8,12 +8,20 @@
 
 import UIKit
 
+/// Class FreehandDrawImageView
 class FreeHandDrawImageView: UIImageView {
     private var lastPoint: CGPoint?
     private var shapeLayer = CAShapeLayer()
     private var shapePath = UIBezierPath()
     
-    var isZoom: Bool = false
+    
+    //MARK:- Public properties
+    var strokeWidth: CGFloat = 4 {
+        willSet {
+            shapeLayer.lineWidth = newValue
+            setNeedsDisplay()
+        }
+    }
     
     var strokeColor: UIColor = UIColor.red {
         willSet {
@@ -22,13 +30,7 @@ class FreeHandDrawImageView: UIImageView {
         }
     }
     
-    var strokeWidth: CGFloat = 4 {
-        willSet {
-            shapeLayer.lineWidth = newValue
-            setNeedsDisplay()
-        }
-    }
-    
+    //MARK:- Init and View setup
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -39,7 +41,9 @@ class FreeHandDrawImageView: UIImageView {
         setupView()
     }
     
+    
     private func setupView() {
+        //Preconfigure drawing layer
         strokeColor = .red
         strokeWidth = 4
         shapeLayer.lineCap = .round
@@ -57,15 +61,13 @@ class FreeHandDrawImageView: UIImageView {
     
     }
     
-    @objc func handlePan(gesture:UIPanGestureRecognizer){
+    @objc private func handlePan(gesture:UIPanGestureRecognizer){
         let location = gesture.location(in: self)
         
         switch gesture.state{
         case .began:
-                print("began")
             lastPoint=location
         case .changed:
-                print("changed")
                drawLine(fromPoint: location, toPoint: lastPoint!)
             lastPoint=location
         case .ended:
@@ -74,53 +76,21 @@ class FreeHandDrawImageView: UIImageView {
             print("canceled")
             
         }
-        
-        
     }
     
-    func drawLine(fromPoint:CGPoint, toPoint:CGPoint){
+   private func drawLine(fromPoint:CGPoint, toPoint:CGPoint){
         
         shapePath.move(to: toPoint)
         shapePath.addLine(to:fromPoint)
         
-        //Save
+        //Save current shape
         shapeLayer.path = shapePath.cgPath
         
     }
-    
-//    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        print("Touches began")
-//        guard isZoom == false else { return }
-//        guard let touch = touches.first, touches.count<2 else { return }
-//        lastPoint = touch.location(in: self)
-//    }
-//
-//    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        print("Touches move")
-//        guard isZoom == false else { return }
-//        guard let touch = touches.first,touches.count<2, let fromPoint = lastPoint else { return }
-//        let currentPoint = touch.location(in: self)
-//
-//        shapePath.move(to: currentPoint)
-//        shapePath.addLine(to: lastPoint!)
-//        lastPoint = currentPoint
-//        shapeLayer.path = shapePath.cgPath
-//    }
-//
-//    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        print("Tocuhes end")
-//        guard let touch = touches.first,touches.count<2, let fromPoint = lastPoint else { return }
-//        let currentPoint = touch.location(in: self)
-//
-//        shapePath.move(to: currentPoint)
-//        shapePath.addLine(to: lastPoint!)
-//        lastPoint = currentPoint
-//        shapeLayer.path = shapePath.cgPath
-//
-//        lastPoint = currentPoint
-//    }
 }
 
+
+//MARK:- Snapshoot extension method for this View
 extension UIView {
     var screenShot: UIImage? {
         let scale = UIScreen.main.scale
