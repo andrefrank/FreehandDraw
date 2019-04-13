@@ -12,6 +12,7 @@ class ViewController: UIViewController,UIScrollViewDelegate {
 
     @IBOutlet weak var imageView: FreeHandDrawImageView!
     
+    
     @IBOutlet weak var scrollView: UIScrollView!
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,17 +31,14 @@ class ViewController: UIViewController,UIScrollViewDelegate {
         imageView.strokeWidth = 10
     }
     
+    @IBAction func clear(_ sender: Any) {
+        imageView.clearFreeHandDrawing()
+    }
+    
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return imageView
     }
    
-    @IBAction func zoom(_ sender: Any) {
-        imageView.isZoom=true
-    }
-    
-    @IBAction func mark(_ sender: Any) {
-        imageView.isZoom=false
-    }
 }
     
 

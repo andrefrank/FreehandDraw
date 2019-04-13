@@ -10,7 +10,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Custom UIImageView-->
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController automaticallyAdjustsScrollViewInsets="NO" id="BYZ-38-t0r" customClass="ViewController" customModule="FreehandDraw" customModuleProvider="target" sceneMemberID="viewController">
@@ -19,10 +19,10 @@
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFill" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hTV-I4-She">
-                                <rect key="frame" x="0.0" y="114" width="375" height="353"/>
+                                <rect key="frame" x="0.0" y="148" width="375" height="319"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="manhatten.png" translatesAutoresizingMaskIntoConstraints="NO" id="1qt-hE-NBw" customClass="FreeHandDrawImageView" customModule="FreehandDraw" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="353"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="319"/>
                                         <accessibility key="accessibilityConfiguration">
                                             <accessibilityTraits key="traits" none="YES"/>
                                             <bool key="isElement" value="YES"/>
@@ -48,8 +48,13 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
-                    <navigationItem key="navigationItem" id="v1a-IV-JbN">
-                        <barButtonItem key="rightBarButtonItem" title="Redraw" id="j2V-zY-J30">
+                    <navigationItem key="navigationItem" title="Custom UIImageView" prompt="FreeHand drawing Imag view" largeTitleDisplayMode="always" id="v1a-IV-JbN">
+                        <barButtonItem key="leftBarButtonItem" title="Clear" id="Naz-QV-YTg">
+                            <connections>
+                                <action selector="clear:" destination="BYZ-38-t0r" id="XsU-sE-EBp"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Change Color" id="j2V-zY-J30">
                             <connections>
                                 <action selector="redrawImage:" destination="BYZ-38-t0r" id="SCS-PS-sJ2"/>
                             </connections>
