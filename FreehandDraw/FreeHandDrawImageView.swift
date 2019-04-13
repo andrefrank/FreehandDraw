@@ -40,44 +40,85 @@ class FreeHandDrawImageView: UIImageView {
     }
     
     private func setupView() {
-        layer.addSublayer(shapeLayer)
         strokeColor = .red
         strokeWidth = 4
+        shapeLayer.lineCap = .round
+        layer.addSublayer(shapeLayer)
+        
+        
+        let panGesture=UIPanGestureRecognizer(target: self, action: #selector(handlePan(gesture:)))
+        panGesture.maximumNumberOfTouches=1
+        panGesture.minimumNumberOfTouches=1
+        
+        self.addGestureRecognizer(panGesture)
+        
         isUserInteractionEnabled = true
-
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        print("Touches began")
-        guard isZoom == false else { return }
-        guard let touch = touches.first, touches.count<2 else { return }
-        lastPoint = touch.location(in: self)
-    }
-    
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        print("Touches move")
-        guard isZoom == false else { return }
-        guard let touch = touches.first,touches.count<2, let fromPoint = lastPoint else { return }
-        let currentPoint = touch.location(in: self)
         
-        shapePath.move(to: currentPoint)
-        shapePath.addLine(to: lastPoint!)
-        lastPoint = currentPoint
+    
+    }
+    
+    @objc func handlePan(gesture:UIPanGestureRecognizer){
+        let location = gesture.location(in: self)
+        
+        switch gesture.state{
+        case .began:
+                print("began")
+            lastPoint=location
+        case .changed:
+                print("changed")
+               drawLine(fromPoint: location, toPoint: lastPoint!)
+            lastPoint=location
+        case .ended:
+            drawLine(fromPoint: location, toPoint: lastPoint!)
+        default:
+            print("canceled")
+            
+        }
+        
+        
+    }
+    
+    func drawLine(fromPoint:CGPoint, toPoint:CGPoint){
+        
+        shapePath.move(to: toPoint)
+        shapePath.addLine(to:fromPoint)
+        
+        //Save
         shapeLayer.path = shapePath.cgPath
+        
     }
     
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        print("Tocuhes end")
-        guard let touch = touches.first,touches.count<2, let fromPoint = lastPoint else { return }
-        let currentPoint = touch.location(in: self)
-        
-        shapePath.move(to: currentPoint)
-        shapePath.addLine(to: lastPoint!)
-        lastPoint = currentPoint
-        shapeLayer.path = shapePath.cgPath
-        
-        lastPoint = currentPoint
-    }
+//    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        print("Touches began")
+//        guard isZoom == false else { return }
+//        guard let touch = touches.first, touches.count<2 else { return }
+//        lastPoint = touch.location(in: self)
+//    }
+//
+//    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        print("Touches move")
+//        guard isZoom == false else { return }
+//        guard let touch = touches.first,touches.count<2, let fromPoint = lastPoint else { return }
+//        let currentPoint = touch.location(in: self)
+//
+//        shapePath.move(to: currentPoint)
+//        shapePath.addLine(to: lastPoint!)
+//        lastPoint = currentPoint
+//        shapeLayer.path = shapePath.cgPath
+//    }
+//
+//    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        print("Tocuhes end")
+//        guard let touch = touches.first,touches.count<2, let fromPoint = lastPoint else { return }
+//        let currentPoint = touch.location(in: self)
+//
+//        shapePath.move(to: currentPoint)
+//        shapePath.addLine(to: lastPoint!)
+//        lastPoint = currentPoint
+//        shapeLayer.path = shapePath.cgPath
+//
+//        lastPoint = currentPoint
+//    }
 }
 
 extension UIView {
