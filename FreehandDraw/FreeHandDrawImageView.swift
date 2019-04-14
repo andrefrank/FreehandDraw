@@ -12,9 +12,13 @@ import UIKit
 class FreeHandDrawImageView: UIImageView {
     private var lastPoint: CGPoint?
     private var shapeLayer = CAShapeLayer()
-    private var shapePath=UIBezierPath()
+    private var shapePath = UIBezierPath()
+    
+    
     
     // MARK: - Public properties
+    weak var containerView:UIScrollView?
+    
     var strokeWidth: CGFloat = 4 {
         willSet {
             shapeLayer.lineWidth = newValue
@@ -29,10 +33,11 @@ class FreeHandDrawImageView: UIImageView {
         }
     }
     
-    //MARK:- Public inteface
-    func clearFreeHandDrawing(){
-       shapePath.removeAllPoints()
-       shapeLayer.path=shapePath.cgPath
+    // MARK: - Public inteface
+    
+    func clearFreeHandDrawing() {
+        shapePath.removeAllPoints()
+        shapeLayer.path = shapePath.cgPath
     }
     
     // MARK: - Init and View setup
@@ -54,21 +59,21 @@ class FreeHandDrawImageView: UIImageView {
         shapeLayer.lineCap = .round
         layer.addSublayer(shapeLayer)
         
-        //Pan recognizer to draw a continuosly line when user pans over the view
+        // Pan recognizer to draw a continuosly line when user pans over the view
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan(gesture:)))
         panGesture.maximumNumberOfTouches = 1
         addGestureRecognizer(panGesture)
         
-        //Enable user interaction for touch and gesture events
+        // Enable user interaction for touch and gesture events
         isUserInteractionEnabled = true
     }
     
-    //The main reason to implement this is because we need the initial location
+    // The main reason to implement this is because we need the initial location
     // where drawing will start
     // The recognizer events are not called in this early state
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let touch=touches.first else {return}
-        lastPoint=touch.location(in: self)
+        guard let touch = touches.first else { return }
+        lastPoint = touch.location(in: self)
     }
     
     //
@@ -77,28 +82,31 @@ class FreeHandDrawImageView: UIImageView {
         
         switch gesture.state {
         case .began:
-            //The first line can be drawn because we have the initial location
+            // The first line can be drawn because we have the initial location
             // from touch event
-            drawLine(fromPoint: lastPoint!, toPoint: location)
-            lastPoint = location
+            
+            guard let lastPoint = self.lastPoint else {
+                self.lastPoint=location
+                return
+            }
+            drawLine(fromPoint: lastPoint, toPoint: location)
+            self.lastPoint = location
         case .changed:
-            drawLine(fromPoint: lastPoint!, toPoint:location)
+            drawLine(fromPoint: lastPoint!, toPoint: location)
             lastPoint = location
         case .ended:
             drawLine(fromPoint: lastPoint!, toPoint: location)
         default:
-          print("cancel")
-       
+            print("cancel")
         }
     }
     
     private func drawLine(fromPoint: CGPoint, toPoint: CGPoint) {
-        shapePath.move(to:fromPoint)
-        shapePath.addLine(to:toPoint)
+        shapePath.move(to: fromPoint)
+        shapePath.addLine(to: toPoint)
         
         //transfer path to layer
-        shapeLayer.path=shapePath.cgPath
-        
+        shapeLayer.path = shapePath.cgPath
     }
 }
 
@@ -106,9 +114,9 @@ class FreeHandDrawImageView: UIImageView {
 
 extension UIImageView {
     var snapshot: UIImage? {
-        //Get scale
+        // Get scale
         let scale = UIScreen.main.scale
-        //Create a bitmap using frame size
+        // Create a bitmap using frame size
         UIGraphicsBeginImageContextWithOptions(layer.frame.size, false, scale)
         
         if let context = UIGraphicsGetCurrentContext() {

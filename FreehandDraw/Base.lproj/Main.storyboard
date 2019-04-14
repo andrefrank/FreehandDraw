@@ -19,10 +19,10 @@
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFill" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hTV-I4-She">
-                                <rect key="frame" x="0.0" y="148" width="375" height="319"/>
+                                <rect key="frame" x="50" y="148" width="275" height="319"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="manhatten.png" translatesAutoresizingMaskIntoConstraints="NO" id="1qt-hE-NBw" customClass="FreeHandDrawImageView" customModule="FreehandDraw" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="319"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="275" height="319"/>
                                         <accessibility key="accessibilityConfiguration">
                                             <accessibilityTraits key="traits" none="YES"/>
                                             <bool key="isElement" value="YES"/>
@@ -38,13 +38,25 @@
                                     <constraint firstItem="1qt-hE-NBw" firstAttribute="top" secondItem="hTV-I4-She" secondAttribute="top" id="wm0-aH-B2s"/>
                                 </constraints>
                             </scrollView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zJk-ED-ikW">
+                                <rect key="frame" x="164" y="530" width="89" height="30"/>
+                                <color key="backgroundColor" red="1" green="0.57810515169999999" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="Gb3-A6-80o"/>
+                                    <constraint firstAttribute="width" constant="89" id="o16-Hm-egq"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="hTV-I4-She" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="EbH-RB-sBu"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="hTV-I4-She" secondAttribute="bottom" constant="200" id="W3t-3c-p7A"/>
+                            <constraint firstItem="zJk-ED-ikW" firstAttribute="top" secondItem="1qt-hE-NBw" secondAttribute="bottom" constant="63" id="Bvg-1A-FnY"/>
+                            <constraint firstItem="hTV-I4-She" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="50" id="EbH-RB-sBu"/>
                             <constraint firstItem="hTV-I4-She" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="50" id="YlP-O2-faf"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="hTV-I4-She" secondAttribute="trailing" id="lGc-VF-yFh"/>
+                            <constraint firstItem="zJk-ED-ikW" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="164" id="aXG-xe-pVP"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="zJk-ED-ikW" secondAttribute="bottom" constant="107" id="j74-fC-7MG"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="hTV-I4-She" secondAttribute="trailing" constant="50" id="lGc-VF-yFh"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="hTV-I4-She" secondAttribute="bottom" constant="200" id="vWj-DK-fed"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>

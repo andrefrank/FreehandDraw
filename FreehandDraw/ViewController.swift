@@ -12,7 +12,6 @@ class ViewController: UIViewController,UIScrollViewDelegate {
 
     @IBOutlet weak var imageView: FreeHandDrawImageView!
     
-    
     @IBOutlet weak var scrollView: UIScrollView!
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,6 +21,7 @@ class ViewController: UIViewController,UIScrollViewDelegate {
         self.scrollView.maximumZoomScale = 6.0;
         self.scrollView.contentSize = self.imageView.frame.size;
         self.scrollView.delegate = self;
+        imageView.containerView = scrollView
     }
     
     @IBAction func redrawImage(_ sender: Any) {
