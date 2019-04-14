@@ -14,11 +14,7 @@ class FreeHandDrawImageView: UIImageView {
     private var shapeLayer = CAShapeLayer()
     private var shapePath = UIBezierPath()
     
-    
-    
     // MARK: - Public properties
-    weak var containerView:UIScrollView?
-    
     var strokeWidth: CGFloat = 4 {
         willSet {
             shapeLayer.lineWidth = newValue
@@ -34,7 +30,6 @@ class FreeHandDrawImageView: UIImageView {
     }
     
     // MARK: - Public inteface
-    
     func clearFreeHandDrawing() {
         shapePath.removeAllPoints()
         shapeLayer.path = shapePath.cgPath
@@ -95,16 +90,19 @@ class FreeHandDrawImageView: UIImageView {
             drawLine(fromPoint: lastPoint!, toPoint: location)
             lastPoint = location
         case .ended:
+            //Draw final curve and reset lastPoint for the next drawing
+            // start point
             drawLine(fromPoint: lastPoint!, toPoint: location)
+            lastPoint=nil
         default:
-            print("cancel")
+            print("shit happens")
         }
     }
     
     private func drawLine(fromPoint: CGPoint, toPoint: CGPoint) {
         shapePath.move(to: fromPoint)
         shapePath.addLine(to: toPoint)
-        
+        shapePath.close()
         //transfer path to layer
         shapeLayer.path = shapePath.cgPath
     }

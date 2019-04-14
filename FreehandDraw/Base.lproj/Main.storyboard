@@ -18,11 +18,11 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFill" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hTV-I4-She">
-                                <rect key="frame" x="50" y="148" width="275" height="319"/>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFill" translatesAutoresizingMaskIntoConstraints="NO" id="hTV-I4-She">
+                                <rect key="frame" x="50" y="148" width="275" height="369"/>
                                 <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="manhatten.png" translatesAutoresizingMaskIntoConstraints="NO" id="1qt-hE-NBw" customClass="FreeHandDrawImageView" customModule="FreehandDraw" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="275" height="319"/>
+                                    <imageView clipsSubviews="YES" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="photo1" translatesAutoresizingMaskIntoConstraints="NO" id="1qt-hE-NBw" customClass="FreeHandDrawImageView" customModule="FreehandDraw" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
                                         <accessibility key="accessibilityConfiguration">
                                             <accessibilityTraits key="traits" none="YES"/>
                                             <bool key="isElement" value="YES"/>
@@ -30,33 +30,19 @@
                                     </imageView>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstAttribute="width" secondItem="1qt-hE-NBw" secondAttribute="width" id="J2F-rw-za9"/>
-                                    <constraint firstItem="1qt-hE-NBw" firstAttribute="leading" secondItem="hTV-I4-She" secondAttribute="leading" id="MKj-zb-tKL"/>
-                                    <constraint firstAttribute="height" secondItem="1qt-hE-NBw" secondAttribute="height" id="VLN-2j-rnn"/>
-                                    <constraint firstAttribute="trailing" secondItem="1qt-hE-NBw" secondAttribute="trailing" id="dHb-LY-JRx"/>
-                                    <constraint firstAttribute="bottom" secondItem="1qt-hE-NBw" secondAttribute="bottom" id="ea4-5S-e6G"/>
-                                    <constraint firstItem="1qt-hE-NBw" firstAttribute="top" secondItem="hTV-I4-She" secondAttribute="top" id="wm0-aH-B2s"/>
+                                    <constraint firstAttribute="trailing" secondItem="1qt-hE-NBw" secondAttribute="trailing" id="AXr-Fz-ruI"/>
+                                    <constraint firstItem="1qt-hE-NBw" firstAttribute="leading" secondItem="hTV-I4-She" secondAttribute="leading" id="XgL-MI-XXz"/>
+                                    <constraint firstAttribute="bottom" secondItem="1qt-hE-NBw" secondAttribute="bottom" id="d48-uJ-0Ka"/>
+                                    <constraint firstItem="1qt-hE-NBw" firstAttribute="top" secondItem="hTV-I4-She" secondAttribute="top" id="mob-na-5Rx"/>
                                 </constraints>
                             </scrollView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zJk-ED-ikW">
-                                <rect key="frame" x="164" y="530" width="89" height="30"/>
-                                <color key="backgroundColor" red="1" green="0.57810515169999999" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="Gb3-A6-80o"/>
-                                    <constraint firstAttribute="width" constant="89" id="o16-Hm-egq"/>
-                                </constraints>
-                                <state key="normal" title="Button"/>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="zJk-ED-ikW" firstAttribute="top" secondItem="1qt-hE-NBw" secondAttribute="bottom" constant="63" id="Bvg-1A-FnY"/>
-                            <constraint firstItem="hTV-I4-She" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="50" id="EbH-RB-sBu"/>
-                            <constraint firstItem="hTV-I4-She" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="50" id="YlP-O2-faf"/>
-                            <constraint firstItem="zJk-ED-ikW" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="164" id="aXG-xe-pVP"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="zJk-ED-ikW" secondAttribute="bottom" constant="107" id="j74-fC-7MG"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="hTV-I4-She" secondAttribute="trailing" constant="50" id="lGc-VF-yFh"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="hTV-I4-She" secondAttribute="bottom" constant="200" id="vWj-DK-fed"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="hTV-I4-She" secondAttribute="trailing" constant="50" id="1fK-zf-Jfn"/>
+                            <constraint firstItem="hTV-I4-She" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="50" id="IvF-Fi-Og3"/>
+                            <constraint firstItem="hTV-I4-She" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="50" id="kIQ-Ef-hW1"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="hTV-I4-She" secondAttribute="bottom" constant="150" id="wdJ-yu-KZ4"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
@@ -74,6 +60,10 @@
                     </navigationItem>
                     <connections>
                         <outlet property="imageView" destination="1qt-hE-NBw" id="ytN-cl-5O8"/>
+                        <outlet property="imageViewBottomConstraint" destination="d48-uJ-0Ka" id="5Fx-Aa-kKT"/>
+                        <outlet property="imageViewLeadingConstraint" destination="XgL-MI-XXz" id="LXf-N8-b4C"/>
+                        <outlet property="imageViewTopConstraint" destination="mob-na-5Rx" id="zbs-xV-HWf"/>
+                        <outlet property="imageViewTrailingConstraint" destination="AXr-Fz-ruI" id="d9v-Uo-qbm"/>
                         <outlet property="scrollView" destination="hTV-I4-She" id="ULq-kj-0WD"/>
                     </connections>
                 </viewController>
@@ -101,6 +91,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="manhatten.png" width="765" height="541"/>
+        <image name="photo1" width="1024" height="768"/>
     </resources>
 </document>

@@ -13,7 +13,6 @@
 		673CC49C226123F30094AEED /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 673CC49A226123F30094AEED /* Main.storyboard */; };
 		673CC49E226123F40094AEED /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 673CC49D226123F40094AEED /* Assets.xcassets */; };
 		673CC4A1226123F40094AEED /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 673CC49F226123F40094AEED /* LaunchScreen.storyboard */; };
-		673CC4A922612A9C0094AEED /* manhatten.png in Resources */ = {isa = PBXBuildFile; fileRef = 673CC4A822612A9C0094AEED /* manhatten.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,7 +24,6 @@
 		673CC49D226123F40094AEED /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		673CC4A0226123F40094AEED /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		673CC4A2226123F40094AEED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		673CC4A822612A9C0094AEED /* manhatten.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = manhatten.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,7 +60,6 @@
 				673CC498226123F30094AEED /* ViewController.swift */,
 				673CC49A226123F30094AEED /* Main.storyboard */,
 				6706EEED2261AF9C005C1BEA /* FreeHandDrawImageView.swift */,
-				673CC4A822612A9C0094AEED /* manhatten.png */,
 				673CC49D226123F40094AEED /* Assets.xcassets */,
 				673CC49F226123F40094AEED /* LaunchScreen.storyboard */,
 				673CC4A2226123F40094AEED /* Info.plist */,
@@ -131,7 +128,6 @@
 				673CC4A1226123F40094AEED /* LaunchScreen.storyboard in Resources */,
 				673CC49E226123F40094AEED /* Assets.xcassets in Resources */,
 				673CC49C226123F30094AEED /* Main.storyboard in Resources */,
-				673CC4A922612A9C0094AEED /* manhatten.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
