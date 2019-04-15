@@ -21,9 +21,7 @@ class ViewController: UIViewController {
     //MARK: - IBOutlets
     @IBOutlet weak var imageView: FreeHandDrawImageView!
     @IBOutlet weak var scrollView: UIScrollView!
-    
-    
-    @IBOutlet weak var drawSwitch: UISwitch!
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,6 +32,11 @@ class ViewController: UIViewController {
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         updateMinZoomScaleForSize(view.bounds.size)
+    }
+    
+    
+    @IBAction func undo(_ sender: Any) {
+        imageView.reverseStroke()
     }
     
     

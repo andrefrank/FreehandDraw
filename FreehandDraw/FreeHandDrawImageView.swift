@@ -14,7 +14,12 @@ class FreeHandDrawImageView: UIImageView {
     private var shapeLayer = CAShapeLayer()
     private var shapePath = UIBezierPath()
     
+    //An array of a stroke dictionary
+    private var shapes = [[String:UIBezierPath]]()
+    private var lastKey:String?
+   
     // MARK: - Public properties
+    
     var strokeWidth: CGFloat = 4 {
         willSet {
             shapeLayer.lineWidth = newValue
@@ -36,7 +41,6 @@ class FreeHandDrawImageView: UIImageView {
     }
     
     // MARK: - Init and View setup
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -62,6 +66,8 @@ class FreeHandDrawImageView: UIImageView {
         // Enable user interaction for touch and gesture events
         isUserInteractionEnabled = true
     }
+
+    //MARK: - Touch event handling
     
     // The main reason to implement this is because we need the initial location
     // where drawing will start
@@ -69,6 +75,7 @@ class FreeHandDrawImageView: UIImageView {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }
         lastPoint = touch.location(in: self)
+        //lastKey=getKeyForStroke()
     }
     
     //
@@ -81,21 +88,47 @@ class FreeHandDrawImageView: UIImageView {
             // from touch event
             
             guard let lastPoint = self.lastPoint else {
-                self.lastPoint=location
+                self.lastPoint = location
                 return
             }
             drawLine(fromPoint: lastPoint, toPoint: location)
+            //addStroke(withKey:lastKey, fromPoint: lastPoint, toPoint: location)
             self.lastPoint = location
         case .changed:
             drawLine(fromPoint: lastPoint!, toPoint: location)
+             //addStroke(withKey:lastKey, fromPoint: lastPoint!, toPoint: location)
             lastPoint = location
         case .ended:
-            //Draw final curve and reset lastPoint for the next drawing
+            // Draw final curve and reset lastPoint for the next drawing
             // start point
             drawLine(fromPoint: lastPoint!, toPoint: location)
-            lastPoint=nil
+            // addStroke(withKey:lastKey, fromPoint: lastPoint!, toPoint: location)
+            lastPoint = nil
         default:
             print("shit happens")
+        }
+    }
+    
+    //MARK: - Drawing methods
+    
+    private func getKeyForStroke()->String{
+        //Get all existing keys
+        let keys=shapes.map { (dict)  -> String in
+            return dict.keys.first!
+        }
+        print(keys)
+        //Remove all multiple keys by using an NSSet
+        let uniqueKeys=NSSet(array: keys)
+        //Convert it back to an array which can be sorted
+        //in ascending order
+        let array:[String] = Array(uniqueKeys) as! [String]
+        let sortedArray=array.sorted(by: {$0<$1})
+
+        //Check existing key
+        if sortedArray.count<1{
+            return "\(1)"
+        }else{
+            return "\(Int(sortedArray.last!)!+1)"
         }
     }
     
@@ -103,9 +136,39 @@ class FreeHandDrawImageView: UIImageView {
         shapePath.move(to: fromPoint)
         shapePath.addLine(to: toPoint)
         shapePath.close()
+        
         //transfer path to layer
         shapeLayer.path = shapePath.cgPath
     }
+    
+    private func addStroke(withKey key:String?, fromPoint: CGPoint, toPoint: CGPoint) {
+        guard let key=key else {return}
+        let path = UIBezierPath()
+        path.move(to: fromPoint)
+        path.addLine(to: toPoint)
+        path.close()
+        shapes.append([key:path])
+        print(shapes)
+    }
+    
+    func reverseStroke(){
+        guard shapes.count>0 else {return}
+       
+        shapes.removeLast()
+       
+        // drawShape()
+    }
+    
+//    func drawShape() {
+//        var drawingShape = UIBezierPath()
+//        print("After remove:\(shapes.count)")
+//        drawingShape = shapes.reduce(drawingShape) { (resultPath, path) -> UIBezierPath in
+//            resultPath.append(path)
+//            return resultPath
+//        }
+//
+//        shapeLayer.path = drawingShape.cgPath
+//    }
 }
 
 // MARK: - Extension for getting a snapshot of the UIImageView
