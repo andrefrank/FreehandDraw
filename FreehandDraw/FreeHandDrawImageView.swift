@@ -15,6 +15,7 @@ class FreeHandDrawImageView: UIView {
     private var touchPaths=[String:UIBezierPath]()
     // A Stroke is a complete set of a Touch event ( began/moved/ended)
     private var strokes=[UIBezierPath]()
+    private var selectedStrokes=[UIBezierPath]()
     
     //Variable Constraints for UIImageView
     var imageViewBottomConstraint:NSLayoutConstraint!
@@ -37,8 +38,6 @@ class FreeHandDrawImageView: UIView {
        let sv=UIScrollView()
        sv.contentMode = UIScrollView.ContentMode.scaleToFill
         sv.translatesAutoresizingMaskIntoConstraints=false
-        sv.minimumZoomScale=0.25
-        sv.maximumZoomScale=5
        sv.showsVerticalScrollIndicator=true
        sv.showsHorizontalScrollIndicator=true
        return sv
@@ -55,7 +54,7 @@ class FreeHandDrawImageView: UIView {
     private lazy var currentShape:CAShapeLayer={
         let currentShape = CAShapeLayer()
         currentShape.fillColor = UIColor.clear.cgColor
-        currentShape.lineWidth = 4
+        currentShape.lineWidth = 5
         currentShape.strokeColor = UIColor.red.cgColor
         currentShape.lineCap = .round
         return currentShape
@@ -65,10 +64,21 @@ class FreeHandDrawImageView: UIView {
     private lazy var lastShape:CAShapeLayer={
         let lastShape = CAShapeLayer()
         lastShape.fillColor = UIColor.clear.cgColor
-        lastShape.lineWidth = 4
+        lastShape.lineWidth = 5
         lastShape.lineCap = .round
-        lastShape.strokeColor = UIColor.red.withAlphaComponent(0.5).cgColor
+        lastShape.strokeColor = UIColor.red.withAlphaComponent(0.6).cgColor
         return lastShape
+    }()
+    
+    //Layer for selected paths
+    private lazy var selectedShape:CAShapeLayer={
+        let ss = CAShapeLayer()
+        ss.fillColor = UIColor.clear.cgColor
+        ss.lineWidth = 5
+        ss.lineCap = .square
+        ss.strokeColor = UIColor.red.withAlphaComponent(0.6).cgColor
+        ss.lineDashPattern = [10,10]
+        return ss
     }()
     
 
@@ -83,15 +93,25 @@ class FreeHandDrawImageView: UIView {
     var strokeColor: UIColor = UIColor.red {
         willSet{
             currentShape.strokeColor=newValue.cgColor
-            lastShape.strokeColor=newValue.withAlphaComponent(0.5).cgColor
+            lastShape.strokeColor=newValue.withAlphaComponent(0.6).cgColor
         }
     }
     
-    var image:UIImage?{
+    var zoomFactor:CGFloat=4{
+        willSet{
+            scrollView.maximumZoomScale=newValue > 6 ? 6 : newValue
+        }
+    }
+    
+    var originalImage:UIImage?{
         willSet{
             imageView.image=newValue
             setNeedsLayout()
         }
+    }
+    
+    var snapShotImage:UIImage?{
+        return imageView.snapshot
     }
     
     
@@ -178,7 +198,7 @@ class FreeHandDrawImageView: UIView {
         //The Layer used for drawing
         imageView.layer.addSublayer(currentShape)
         imageView.layer.addSublayer(lastShape)
-        
+        imageView.layer.addSublayer(selectedShape)
         
         scrollView.addSubview(imageView)
         setupConstraintsForImageView()
@@ -198,16 +218,16 @@ class FreeHandDrawImageView: UIView {
        
     }
     
-    // MARK: - Public inteface
+    // MARK: - Public interface
     func clear() {
-        
-        
+        strokes.removeAll()
+        selectedStrokes.removeAll()
+        setNeedsDisplay()
     }
 
-    //MARK: - private drawing methods
-    
-   
+
 }
+
 
 
 
@@ -292,6 +312,15 @@ extension FreeHandDrawImageView{
            let key=String(format: "%d", index)
            //Save Bezierpath first point in dictionary
             let touchLocation = touch.location(in: imageView)
+            
+            for (index,stroke) in strokes.enumerated(){
+                if touchLocation.contains(path: stroke){
+                    selectedStrokes.append(stroke)
+                    strokes.remove(at: index)
+                    setNeedsDisplay()
+                }
+            }
+            
            let path = UIBezierPath()
            path.move(to: touchLocation)
            touchPaths[key]=path
@@ -361,7 +390,13 @@ extension FreeHandDrawImageView{
      
         //Draw in different layer
         currentShape.path = lastPath.cgPath
-       
+        
+        let selectedPath=UIBezierPath()
+        for path in selectedStrokes{
+            selectedPath.append(path)
+        }
+       selectedShape.path=selectedPath.cgPath
+        
     }
 }
 
@@ -382,5 +417,16 @@ extension UIImageView {
             return image
         }
         return nil
+    }
+}
+
+extension CGPoint{
+    func contains(path:UIBezierPath,thresholdWidth:CGFloat=10,scale:CGFloat=1)->Bool{
+        let fatCGPath=path.cgPath.copy(strokingWithWidth: thresholdWidth/scale, lineCap: CGLineCap.round, lineJoin: CGLineJoin.miter, miterLimit: 1)
+        let newPath=UIBezierPath(cgPath: fatCGPath)
+        if newPath.contains(self){
+            return true
+        }
+        return false
     }
 }
