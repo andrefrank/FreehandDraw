@@ -44,6 +44,9 @@ class FreeHandDrawImageView: UIView {
        return sv
     }()
     
+    
+    private let menu=UIMenuController()
+    
     //MARK: - private drawing properties
     private var shapes = [[String:UIBezierPath]]()
     private var lastKey:String?
@@ -249,10 +252,10 @@ extension FreeHandDrawImageView{
     @objc func handleLongPinch(gesture:UILongPressGestureRecognizer){
         //Set custom view as first responder to enable menu
         
-        guard let _=self.window, self.becomeFirstResponder() else {return}
+        guard let _=self.window, self.becomeFirstResponder(), !menu.isMenuVisible else {return}
         
         //Setup menu & items
-        let menu=UIMenuController()
+        
         let drawItem=UIMenuItem(title: "Draw", action: #selector(handleDrawMenuItem))
         
         let moveItem=UIMenuItem(title: "Scroll & Scale", action: #selector(handleScrollMenuItem))
@@ -261,13 +264,14 @@ extension FreeHandDrawImageView{
         
         //Show menu in custom view
         menu.setTargetRect(bounds, in: self)
-        menu.update()
         menu.setMenuVisible(true, animated: true)
+       
     }
     
     //MARK: - Handle Menu
     @objc func handleDrawMenuItem(){
         isDrawSelected=true
+      
     }
     
     @objc func handleScrollMenuItem(){
