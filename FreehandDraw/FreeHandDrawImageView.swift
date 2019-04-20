@@ -70,13 +70,15 @@ class FreeHandDrawImageView: UIView {
     // MARK: - Public properties
     var strokeWidth: CGFloat = 4 {
         willSet {
-           
+           currentShape.lineWidth=newValue
+           lastShape.lineWidth=newValue
         }
     }
     
     var strokeColor: UIColor = UIColor.red {
-        willSet {
-           
+        willSet{
+            currentShape.strokeColor=newValue.cgColor
+            lastShape.strokeColor=newValue.withAlphaComponent(0.5).cgColor
         }
     }
     
@@ -237,9 +239,9 @@ extension FreeHandDrawImageView{
         
         //Setup menu & items
         let menu=UIMenuController()
-        let drawItem=UIMenuItem(title: "Select Draw", action: #selector(handleDrawMenuItem))
+        let drawItem=UIMenuItem(title: "Draw", action: #selector(handleDrawMenuItem))
         
-        let moveItem=UIMenuItem(title: "Select Scroll", action: #selector(handleScrollMenuItem))
+        let moveItem=UIMenuItem(title: "Scroll & Scale", action: #selector(handleScrollMenuItem))
         
         menu.menuItems=[drawItem,moveItem]
         
@@ -251,13 +253,11 @@ extension FreeHandDrawImageView{
     
     //MARK: - Handle Selection menu
     @objc func handleDrawMenuItem(){
-        print("Item draw")
         scrollView.isScrollEnabled=false
         scrollView.isUserInteractionEnabled=false
     }
     
     @objc func handleScrollMenuItem(){
-        print("Item scroll")
         scrollView.isScrollEnabled=true
         scrollView.isUserInteractionEnabled=true
     }
