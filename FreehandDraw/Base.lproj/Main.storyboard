@@ -18,53 +18,26 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFill" translatesAutoresizingMaskIntoConstraints="NO" id="hTV-I4-She">
-                                <rect key="frame" x="50" y="148" width="275" height="369"/>
-                                <subviews>
-                                    <imageView clipsSubviews="YES" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="photo1" translatesAutoresizingMaskIntoConstraints="NO" id="1qt-hE-NBw" customClass="FreeHandDrawImageView" customModule="FreehandDraw" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
-                                        <accessibility key="accessibilityConfiguration">
-                                            <accessibilityTraits key="traits" none="YES"/>
-                                            <bool key="isElement" value="YES"/>
-                                        </accessibility>
-                                    </imageView>
-                                </subviews>
-                                <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="1qt-hE-NBw" secondAttribute="trailing" id="AXr-Fz-ruI"/>
-                                    <constraint firstItem="1qt-hE-NBw" firstAttribute="leading" secondItem="hTV-I4-She" secondAttribute="leading" id="XgL-MI-XXz"/>
-                                    <constraint firstAttribute="bottom" secondItem="1qt-hE-NBw" secondAttribute="bottom" id="d48-uJ-0Ka"/>
-                                    <constraint firstItem="1qt-hE-NBw" firstAttribute="top" secondItem="hTV-I4-She" secondAttribute="top" id="mob-na-5Rx"/>
-                                </constraints>
-                            </scrollView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="os5-3R-cbp" customClass="FreeHandDrawImageView" customModule="FreehandDraw" customModuleProvider="target">
+                                <rect key="frame" x="16" y="262" width="343" height="198"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="hTV-I4-She" secondAttribute="trailing" constant="50" id="1fK-zf-Jfn"/>
-                            <constraint firstItem="hTV-I4-She" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="50" id="IvF-Fi-Og3"/>
-                            <constraint firstItem="hTV-I4-She" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="50" id="kIQ-Ef-hW1"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="hTV-I4-She" secondAttribute="bottom" constant="150" id="wdJ-yu-KZ4"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="os5-3R-cbp" secondAttribute="bottom" constant="207" id="23j-zE-mea"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="os5-3R-cbp" secondAttribute="trailing" constant="16" id="KT1-ds-hrg"/>
+                            <constraint firstItem="os5-3R-cbp" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="c6R-aR-aFF"/>
+                            <constraint firstItem="os5-3R-cbp" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="164" id="gnv-Tf-AL6"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <navigationItem key="navigationItem" title="Custom UIImageView" prompt="FreeHand drawing Imag view" largeTitleDisplayMode="always" id="v1a-IV-JbN">
-                        <barButtonItem key="leftBarButtonItem" title="Clear" id="Naz-QV-YTg">
-                            <connections>
-                                <action selector="clear:" destination="BYZ-38-t0r" id="XsU-sE-EBp"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" title="Change Color" id="j2V-zY-J30">
-                            <connections>
-                                <action selector="redrawImage:" destination="BYZ-38-t0r" id="SCS-PS-sJ2"/>
-                            </connections>
-                        </barButtonItem>
+                        <barButtonItem key="leftBarButtonItem" title="Clear" id="Naz-QV-YTg"/>
+                        <barButtonItem key="rightBarButtonItem" title="Change Color" id="j2V-zY-J30"/>
                     </navigationItem>
                     <connections>
-                        <outlet property="imageView" destination="1qt-hE-NBw" id="ytN-cl-5O8"/>
-                        <outlet property="imageViewBottomConstraint" destination="d48-uJ-0Ka" id="5Fx-Aa-kKT"/>
-                        <outlet property="imageViewLeadingConstraint" destination="XgL-MI-XXz" id="LXf-N8-b4C"/>
-                        <outlet property="imageViewTopConstraint" destination="mob-na-5Rx" id="zbs-xV-HWf"/>
-                        <outlet property="imageViewTrailingConstraint" destination="AXr-Fz-ruI" id="d9v-Uo-qbm"/>
-                        <outlet property="scrollView" destination="hTV-I4-She" id="ULq-kj-0WD"/>
+                        <outlet property="imageView" destination="os5-3R-cbp" id="OGU-UZ-oDj"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -90,7 +63,4 @@
             <point key="canvasLocation" x="131.8840579710145" y="128.57142857142856"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="photo1" width="1024" height="768"/>
-    </resources>
 </document>
