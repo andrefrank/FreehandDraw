@@ -11,10 +11,10 @@ import UIKit
 /// Class FreehandDrawImageView
 class FreeHandDrawImageView: UIView {
    
-    //MARK: - Private Properties
-    private var lastPoint: CGPoint?
-    private var shapeLayer = CAShapeLayer()
-    private var shapePath = UIBezierPath()
+    //MARK: - Private Properties for path and each individual stroke
+    private var touchPaths=[String:UIBezierPath]()
+    // A Stroke is a complete set of a Touch event ( began/moved/ended)
+    private var strokes=[UIBezierPath]()
     
     //Variable Constraints for UIImageView
     var imageViewBottomConstraint:NSLayoutConstraint!
@@ -44,19 +44,39 @@ class FreeHandDrawImageView: UIView {
     private var shapes = [[String:UIBezierPath]]()
     private var lastKey:String?
    
+    //Used for the currently drawn path with a more prominent stroke color
+    private lazy var currentShape:CAShapeLayer={
+        let currentShape = CAShapeLayer()
+        currentShape.fillColor = UIColor.clear.cgColor
+        currentShape.lineWidth = 4
+        currentShape.strokeColor = UIColor.red.cgColor
+        currentShape.lineCap = .round
+        return currentShape
+    }()
+    
+    //Used for all finished paths which will be drawn with a bit
+    //different color
+    private lazy var lastShape:CAShapeLayer={
+        let lastShape = CAShapeLayer()
+        lastShape.fillColor = UIColor.clear.cgColor
+        lastShape.lineWidth = 4
+        lastShape.lineCap = .round
+        lastShape.strokeColor = UIColor.red.withAlphaComponent(0.5).cgColor
+        return lastShape
+    }()
+    
+    
     
     // MARK: - Public properties
     var strokeWidth: CGFloat = 4 {
         willSet {
-            shapeLayer.lineWidth = newValue
-            imageView.setNeedsDisplay()
+           
         }
     }
     
     var strokeColor: UIColor = UIColor.red {
         willSet {
-            shapeLayer.strokeColor = newValue.cgColor
-            imageView.setNeedsDisplay()
+           
         }
     }
     
@@ -79,14 +99,16 @@ class FreeHandDrawImageView: UIView {
    
     //MARK:- Life cycle of custom View
     override func layoutSubviews() {
+        guard let _=superview else {return}
         
-        guard let parent=superview else {return}
-         super.layoutSubviews()
+        super.layoutSubviews()
+        
         updateMinZoomScaleForSize(bounds.size)
         scrollView.setContentOffset(center, animated: true)
       
     }
     
+    //Used for UIMenuController
     override var canBecomeFirstResponder: Bool{
         return true
     }
@@ -95,7 +117,6 @@ class FreeHandDrawImageView: UIView {
         super.becomeFirstResponder()
         return true
     }
-    
     
     //MARK: - Setup all views
     private func installGestures(){
@@ -129,132 +150,46 @@ class FreeHandDrawImageView: UIView {
         NSLayoutConstraint.activate([scrollViewTopConstraint,scrollViewLeadingConstraint,scrollViewTrailingConstraint,scrollViewBottomConstraint])
     }
     
+    
     private func setupView() {
         installGestures()
         
+        //The Layer used for drawing
+        imageView.layer.addSublayer(currentShape)
+        imageView.layer.addSublayer(lastShape)
+        
+        //Get valid minScale numbers
         imageView.frame=CGRect(x:0, y:0, width:bounds.width, height:bounds.height)
         
-        // Preconfigure drawing layer
-        strokeColor = .red
-        strokeWidth = 4
-        shapeLayer.lineCap = .round
-        //Install Drawing layer
-        imageView.layer.addSublayer(shapeLayer)
-        
         scrollView.addSubview(imageView)
-        
         setupConstraintsForImageView()
        
         scrollView.delegate=self
         addSubview(scrollView)
-        
         setupConstraintsForScrollView()
         
-        // Enable user interaction for touch and gesture events
-        //imageView.isUserInteractionEnabled = true
+        // Enable user interaction for touch and gesture events in parent view
+        // for enable finger drawing
+        self.isUserInteractionEnabled=true
+        self.isMultipleTouchEnabled=true
+        
+        //Must disable to forward the Touch events to the parent view
+        imageView.isUserInteractionEnabled=false
+        imageView.isMultipleTouchEnabled=false
+       
     }
     
     // MARK: - Public inteface
-    func clearFreeHandDrawing() {
-        shapePath.removeAllPoints()
-        shapeLayer.path = shapePath.cgPath
+    func clear() {
+        
+        
     }
 
     //MARK: - private drawing methods
     
-    private func getKeyForStroke()->String{
-        //Get all existing keys
-        let keys=shapes.map { (dict)  -> String in
-            return dict.keys.first!
-        }
-        print(keys)
-        //Remove all multiple keys by using an NSSet
-        let uniqueKeys=NSSet(array: keys)
-        //Convert it back to an array which can be sorted
-        //in ascending order
-        let array:[String] = Array(uniqueKeys) as! [String]
-        let sortedArray=array.sorted(by: {$0<$1})
-
-        //Check existing key
-        if sortedArray.count<1{
-            return "\(1)"
-        }else{
-            return "\(Int(sortedArray.last!)!+1)"
-        }
-    }
-    
-    private func drawLine(fromPoint: CGPoint, toPoint: CGPoint) {
-        shapePath.move(to: fromPoint)
-        shapePath.addLine(to: toPoint)
-        shapePath.close()
-        
-        //transfer path to layer
-        shapeLayer.path = shapePath.cgPath
-    }
-    
-    private func addStroke(withKey key:String?, fromPoint: CGPoint, toPoint: CGPoint) {
-        guard let key=key else {return}
-        let path = UIBezierPath()
-        path.move(to: fromPoint)
-        path.addLine(to: toPoint)
-        path.close()
-        shapes.append([key:path])
-        print(shapes)
-    }
-    
-    func reverseStroke(){
-        guard shapes.count>0 else {return}
-       
-        shapes.removeLast()
-       
-        // drawShape()
-    }
-    
-//    func drawShape() {
-//        var drawingShape = UIBezierPath()
-//        print("After remove:\(shapes.count)")
-//        drawingShape = shapes.reduce(drawingShape) { (resultPath, path) -> UIBezierPath in
-//            resultPath.append(path)
-//            return resultPath
-//        }
-//
-//        shapeLayer.path = drawingShape.cgPath
-//    }
+   
 }
 
-
-//MARK: - Handle Pan Gesture
-extension FreeHandDrawImageView{
-    @objc private func handlePan(gesture: UIPanGestureRecognizer) {
-        let location = gesture.location(in: self)
-        
-        switch gesture.state {
-        case .began:
-            // The first line can be drawn because we have the initial location
-            // from touch event
-            
-            guard let lastPoint = self.lastPoint else {
-                self.lastPoint = location
-                return
-            }
-            drawLine(fromPoint: lastPoint, toPoint: location)
-            //addStroke(withKey:lastKey, fromPoint: lastPoint, toPoint: location)
-            self.lastPoint = location
-        case .changed:
-            drawLine(fromPoint: lastPoint!, toPoint: location)
-            //addStroke(withKey:lastKey, fromPoint: lastPoint!, toPoint: location)
-            lastPoint = location
-        case .ended:
-            // Draw final curve and reset lastPoint for the next drawing
-            // start point
-            drawLine(fromPoint: lastPoint!, toPoint: location)
-            // addStroke(withKey:lastKey, fromPoint: lastPoint!, toPoint: location)
-            lastPoint = nil
-        default:
-            print("shit happens")
-        }
-    }
-}
 
 
 //MARK: - ScrollView Delegate methods
@@ -263,7 +198,7 @@ extension FreeHandDrawImageView:UIScrollViewDelegate{
         let widthScale = size.width / imageView.bounds.width
         let heigthScale = size.height / imageView.bounds.height
         
-        var minScale = min(heigthScale,widthScale)
+        let minScale = min(heigthScale,widthScale)
         scrollView.minimumZoomScale = minScale
         scrollView.zoomScale = minScale
     }
@@ -298,10 +233,7 @@ extension FreeHandDrawImageView{
     
     @objc func handleLongPinch(gesture:UILongPressGestureRecognizer){
         //Set custom view as first responder to enable menu
-        if let _ = window {
-            becomeFirstResponder()
-            print("window")
-        }
+        if let _ = window {becomeFirstResponder()}
         
         //Setup menu & items
         let menu=UIMenuController()
@@ -320,10 +252,14 @@ extension FreeHandDrawImageView{
     //MARK: - Handle Selection menu
     @objc func handleDrawMenuItem(){
         print("Item draw")
+        scrollView.isScrollEnabled=false
+        scrollView.isUserInteractionEnabled=false
     }
     
     @objc func handleScrollMenuItem(){
         print("Item scroll")
+        scrollView.isScrollEnabled=true
+        scrollView.isUserInteractionEnabled=true
     }
     
 }
@@ -332,25 +268,72 @@ extension FreeHandDrawImageView{
 //MARK: - Handle touch events for drawing UIBezierpath
 extension FreeHandDrawImageView{
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        print(touches.count)
-        guard let touch = touches.first, touches.count<2 else {
-            print("More than one finger used")
-            return }
-        lastPoint = touch.location(in: self)
-        //lastKey=getKeyForStroke()
+        
+        for (index,touch) in touches.enumerated() {
+           let key=String(format: "%d", index)
+           let touchLocation = touch.location(in: imageView)
+           let path = UIBezierPath()
+           path.move(to: touchLocation)
+           touchPaths[key]=path
+        }
+       
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        
+        for (index,touch) in touches.enumerated() {
+            let key=String(format: "%d", index)
+            if let path = touchPaths[key] {
+                 let touchLocation = touch.location(in: imageView)
+                path.addLine(to: touchLocation)
+                
+            }
+            
+            setNeedsDisplay()
+        }
         
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         
+        for (index,_) in touches.enumerated() {
+            let key=String(format: "%d", index)
+            if let path = touchPaths[key] {
+               strokes.append(path)
+               touchPaths.removeValue(forKey: key)
+            }
+            
+            setNeedsDisplay()
+        }
     }
     
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        touchesEnded(touches, with: event)
+    }
+}
+
+
+extension FreeHandDrawImageView{
+    override func draw(_ rect: CGRect) {
+       
+        //Create the drawing path for all exisiting strokes
+        //using specified user color
+        let drawingPath=UIBezierPath()
+       
+        for path in strokes{
+           drawingPath.append(path)
+        }
         
+       lastShape.path=drawingPath.cgPath
+        
+        let lastPath=UIBezierPath()
+        for path in touchPaths.values{
+            lastPath.append(path)
+        }
+     
+        currentShape.path = lastPath.cgPath
+       
     }
 }
 
