@@ -19,24 +19,16 @@
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="os5-3R-cbp" customClass="FreeHandDrawImageView" customModule="FreehandDraw" customModuleProvider="target">
-                                <rect key="frame" x="16" y="144" width="343" height="198"/>
+                                <rect key="frame" x="16" y="144" width="343" height="337"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="5XS-1t-xSz" userLabel="Snapshot">
-                                <rect key="frame" x="67" y="397" width="241" height="128"/>
-                            </imageView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="os5-3R-cbp" secondAttribute="bottom" constant="325" id="23j-zE-mea"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="os5-3R-cbp" secondAttribute="bottom" constant="186" id="23j-zE-mea"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="os5-3R-cbp" secondAttribute="trailing" constant="16" id="KT1-ds-hrg"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="5XS-1t-xSz" secondAttribute="bottom" constant="142" id="PxZ-fi-JdK"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="5XS-1t-xSz" secondAttribute="trailing" constant="67" id="aDc-0G-duP"/>
                             <constraint firstItem="os5-3R-cbp" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="c6R-aR-aFF"/>
-                            <constraint firstItem="5XS-1t-xSz" firstAttribute="top" secondItem="os5-3R-cbp" secondAttribute="bottom" constant="55" id="gmD-vY-SjU"/>
                             <constraint firstItem="os5-3R-cbp" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="46" id="gnv-Tf-AL6"/>
-                            <constraint firstItem="5XS-1t-xSz" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="67" id="ocK-rE-FhA"/>
-                            <constraint firstItem="5XS-1t-xSz" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="wOy-W4-WFr"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
@@ -54,7 +46,6 @@
                     </navigationItem>
                     <connections>
                         <outlet property="imageView" destination="os5-3R-cbp" id="OGU-UZ-oDj"/>
-                        <outlet property="snapShotImage" destination="5XS-1t-xSz" id="frf-3o-DKA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

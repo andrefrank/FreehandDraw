@@ -9,9 +9,7 @@
 import UIKit
 
 class ViewController: UIViewController {
-    
-    @IBOutlet weak var snapShotImage: UIImageView!
-    
+        
     
     //MARK: - IBOutlets
     @IBOutlet weak var imageView: FreeHandDrawImageView!
@@ -26,7 +24,7 @@ class ViewController: UIViewController {
         imageView.clear()
     }
     @IBAction func snapShot(_ sender: Any) {
-        snapShotImage.image=imageView.snapShotImage
+       
         imageView.zoomFactor=5
     }
     

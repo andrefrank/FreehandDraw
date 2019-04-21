@@ -10,8 +10,8 @@ import UIKit
 
 /// Class FreehandDrawImageView
 class FreeHandDrawImageView: UIView {
-    
     // MARK: - Public properties
+    
     var strokeWidth: CGFloat = 4 {
         willSet {
             currentShape.lineWidth = newValue
@@ -56,6 +56,7 @@ class FreeHandDrawImageView: UIView {
     }
     
     // MARK: - Public interface methods
+    
     func clear() {
         if !strokes.isEmpty {
             strokes.removeAll()
@@ -72,6 +73,7 @@ class FreeHandDrawImageView: UIView {
     }
     
     // MARK: - Init
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -122,7 +124,7 @@ class FreeHandDrawImageView: UIView {
         let imageViewHeighthConstraint = NSLayoutConstraint(item: imageView, attribute: .height, relatedBy: .equal, toItem: scrollView, attribute: .height, multiplier: 1, constant: 0)
         
         imageViewWidthConstraint.priority = UILayoutPriority(rawValue: 250)
-        imageViewHeighthConstraint.priority = UILayoutPriority(rawValue: 250)
+        imageViewHeighthConstraint.priority = UILayoutPriority(rawValue: 500)
         
         NSLayoutConstraint.activate([imageViewLeadingConstraint, imageViewTopConstraint, imageViewBottomConstraint, imageViewTrailingConstraint, imageViewHeighthConstraint, imageViewWidthConstraint])
     }
@@ -160,13 +162,15 @@ class FreeHandDrawImageView: UIView {
         imageView.isMultipleTouchEnabled = false
     }
     
-    
     // MARK: - Private Properties for path and each individual stroke
+    
     private var touchPaths = [String: UIBezierPath]()
     // A Stroke is a complete set of a Touch event ( began/moved/ended)
     private var strokes = [UIBezierPath]()
     private var selectedStrokes = [UIBezierPath]()
-    private var lastTouchLocation: CGPoint?
+    private var selectTouchLocation: CGPoint?
+    private var trackingTouchLocation:CGPoint?
+    private var isValidPath=false
     
     // Variable Constraints for UIImageView
     var imageViewBottomConstraint: NSLayoutConstraint!
@@ -228,7 +232,7 @@ class FreeHandDrawImageView: UIView {
         ss.lineWidth = 5
         ss.lineCap = .square
         ss.strokeColor = UIColor.red.withAlphaComponent(0.6).cgColor
-        ss.lineDashPattern = [10, 10]
+        ss.lineDashPattern = [10,7]
         return ss
     }()
 }
@@ -316,7 +320,6 @@ extension FreeHandDrawImageView {
 // MARK: - Handle touch events for drawing UIBezierpath
 
 extension FreeHandDrawImageView {
-    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         // Collect start location of drawing
         // This method can be used for more than 1 touch
@@ -326,10 +329,16 @@ extension FreeHandDrawImageView {
             // Save Bezierpath first point in dictionary
             let touchLocation = touch.location(in: imageView)
             
-            // Save touch location for selection/ undo selection handling
-            lastTouchLocation = touchLocation
+           //Store current location when the user only wants to select
+           // a path
+           selectTouchLocation = touchLocation
             
-            //Save path
+            //Tracks touch movement
+            // to identify a continious touch and differentiate
+            // a real path from a single hit event or path selection
+            trackingTouchLocation = touchLocation
+            
+            // Save first touch as a start point in path
             let path = UIBezierPath()
             path.move(to: touchLocation)
             touchPaths[key] = path
@@ -337,16 +346,29 @@ extension FreeHandDrawImageView {
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        // User didn't want to select/unselect a path
-        // so clear last touch point
-        lastTouchLocation = nil
+        
+        //Used touch threshold
+        let touchThreshold: CGFloat = 10
+        
         
         // Collect moving touch locations using unique touch key
         for (index, touch) in touches.enumerated() {
             let key = String(format: "%d", index)
             if let path = touchPaths[key] {
                 let touchLocation = touch.location(in: imageView)
-                path.addLine(to: touchLocation)
+                
+                //Only add line to a path when the user has moved his finger
+                //a minimum distance ( threshold ) from the first tracking location
+                if let firstTouchLocation = self.trackingTouchLocation {
+                    if CGPoint.distance(firstTouchLocation, touchLocation) > touchThreshold || isValidPath{
+                        path.addLine(to: touchLocation)
+                        // This is a real path and not used as a selection to
+                        // path
+                        selectTouchLocation=nil
+                        isValidPath=true
+                    }
+                    
+                }
             }
             // Trigger drawing
             setNeedsDisplay()
@@ -354,6 +376,9 @@ extension FreeHandDrawImageView {
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        trackingTouchLocation=nil
+        isValidPath=false
+        
         for (index, _) in touches.enumerated() {
             let key = String(format: "%d", index)
             if let path = touchPaths[key] {
@@ -363,48 +388,55 @@ extension FreeHandDrawImageView {
                 touchPaths.removeValue(forKey: key)
             }
             
-            if let lastTouchLocation = self.lastTouchLocation {
-                if !hasSelect(touchLocation: lastTouchLocation){
-                    _=hasUnselect(touchLocation: lastTouchLocation)
+            if let lastTouchLocation = self.selectTouchLocation {
+                if !hasSelect(touchLocation: lastTouchLocation) {
+                    _ = hasUnselect(touchLocation: lastTouchLocation)
                 }
             }
+            
+            selectTouchLocation=nil
             
             // Trigger drawing
             setNeedsDisplay()
         }
     }
     
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        
+        //Reset all retained touch properties
+        trackingTouchLocation=nil
+        selectTouchLocation=nil
+        isValidPath=false
+        
+        touchesEnded(touches, with: event)
+    }
     
-    private func hasSelect(touchLocation:CGPoint)->Bool{
-        var hasSelect:Bool=false
+    private func hasSelect(touchLocation: CGPoint) -> Bool {
+        var hasSelect: Bool = false
         for (index, stroke) in strokes.enumerated() {
             if touchLocation.contains(path: stroke) {
                 selectedStrokes.append(stroke)
                 if strokes.indices.contains(index) {
                     strokes.remove(at: index)
                 }
-                hasSelect=true
+                hasSelect = true
             }
         }
         return hasSelect
     }
     
-    private func hasUnselect(touchLocation:CGPoint)->Bool{
-        var hasUnselect:Bool=false
+    private func hasUnselect(touchLocation: CGPoint) -> Bool {
+        var hasUnselect: Bool = false
         for (index, stroke) in selectedStrokes.enumerated() {
             if touchLocation.contains(path: stroke) {
                 strokes.append(stroke)
                 if selectedStrokes.indices.contains(index) {
                     selectedStrokes.remove(at: index)
                 }
-               hasUnselect=true
+                hasUnselect = true
             }
         }
         return hasUnselect
-    }
-    
-    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        touchesEnded(touches, with: event)
     }
 }
 
@@ -461,12 +493,19 @@ extension UIImageView {
 }
 
 extension CGPoint {
-    func contains(path: UIBezierPath, thresholdWidth: CGFloat = 10, scale: CGFloat = 1) -> Bool {
+    func contains(path: UIBezierPath, thresholdWidth: CGFloat = 15, scale: CGFloat = 1) -> Bool {
         let fatCGPath = path.cgPath.copy(strokingWithWidth: thresholdWidth / scale, lineCap: CGLineCap.round, lineJoin: CGLineJoin.miter, miterLimit: 1)
+        
         let newPath = UIBezierPath(cgPath: fatCGPath)
         if newPath.contains(self) {
             return true
         }
         return false
+    }
+    
+    static func distance(_ a: CGPoint, _ b: CGPoint) -> CGFloat {
+        let xDist = a.x - b.x
+        let yDist = a.y - b.y
+        return CGFloat(sqrt(xDist * xDist + yDist * yDist))
     }
 }
