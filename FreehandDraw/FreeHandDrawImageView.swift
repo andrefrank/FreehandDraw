@@ -10,80 +10,8 @@ import UIKit
 
 /// Class FreehandDrawImageView
 class FreeHandDrawImageView: UIView {
-    // MARK: - Private Properties for path and each individual stroke
-    
-    private var touchPaths = [String: UIBezierPath]()
-    // A Stroke is a complete set of a Touch event ( began/moved/ended)
-    private var strokes = [UIBezierPath]()
-    private var selectedStrokes = [UIBezierPath]()
-    private var lastTouchLocation: CGPoint?
-    
-    // Variable Constraints for UIImageView
-    var imageViewBottomConstraint: NSLayoutConstraint!
-    var imageViewTopConstraint: NSLayoutConstraint!
-    var imageViewLeadingConstraint: NSLayoutConstraint!
-    var imageViewTrailingConstraint: NSLayoutConstraint!
-    
-    // Privatly used views
-    private var imageView: UIImageView = {
-        let iv = UIImageView()
-        // Predefine rect for minimum scale value
-        iv.frame = CGRect(x: 0, y: 0, width: 1024, height: 768)
-        
-        iv.contentMode = UIImageView.ContentMode.scaleToFill
-        iv.translatesAutoresizingMaskIntoConstraints = false
-        return iv
-    }()
-    
-    private var scrollView: UIScrollView = {
-        let sv = UIScrollView()
-        sv.contentMode = UIScrollView.ContentMode.scaleToFill
-        sv.translatesAutoresizingMaskIntoConstraints = false
-        sv.showsVerticalScrollIndicator = true
-        sv.showsHorizontalScrollIndicator = true
-        return sv
-    }()
-    
-    private let menu = UIMenuController()
-    
-    // MARK: - private drawing properties
-    
-    private var shapes = [[String: UIBezierPath]]()
-    private var lastKey: String?
-    
-    // layer for all paths
-    private lazy var currentShape: CAShapeLayer = {
-        let currentShape = CAShapeLayer()
-        currentShape.fillColor = UIColor.clear.cgColor
-        currentShape.lineWidth = 5
-        currentShape.strokeColor = UIColor.red.cgColor
-        currentShape.lineCap = .round
-        return currentShape
-    }()
-    
-    // Layer for all paths except the last one path
-    private lazy var lastShape: CAShapeLayer = {
-        let lastShape = CAShapeLayer()
-        lastShape.fillColor = UIColor.clear.cgColor
-        lastShape.lineWidth = 5
-        lastShape.lineCap = .round
-        lastShape.strokeColor = UIColor.red.withAlphaComponent(0.6).cgColor
-        return lastShape
-    }()
-    
-    // Layer for selected paths
-    private lazy var selectedShape: CAShapeLayer = {
-        let ss = CAShapeLayer()
-        ss.fillColor = UIColor.clear.cgColor
-        ss.lineWidth = 5
-        ss.lineCap = .square
-        ss.strokeColor = UIColor.red.withAlphaComponent(0.6).cgColor
-        ss.lineDashPattern = [10, 10]
-        return ss
-    }()
     
     // MARK: - Public properties
-    
     var strokeWidth: CGFloat = 4 {
         willSet {
             currentShape.lineWidth = newValue
@@ -127,8 +55,23 @@ class FreeHandDrawImageView: UIView {
         }
     }
     
-    // MARK: - Init
+    // MARK: - Public interface methods
+    func clear() {
+        if !strokes.isEmpty {
+            strokes.removeAll()
+            selectedStrokes.removeAll()
+            setNeedsDisplay()
+        }
+    }
     
+    func clearSelection() {
+        if !selectedStrokes.isEmpty {
+            selectedStrokes.removeAll()
+            setNeedsDisplay()
+        }
+    }
+    
+    // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -217,22 +160,77 @@ class FreeHandDrawImageView: UIView {
         imageView.isMultipleTouchEnabled = false
     }
     
-    // MARK: - Public interface
     
-    func clear() {
-        if !strokes.isEmpty {
-            strokes.removeAll()
-            selectedStrokes.removeAll()
-            setNeedsDisplay()
-        }
-    }
+    // MARK: - Private Properties for path and each individual stroke
+    private var touchPaths = [String: UIBezierPath]()
+    // A Stroke is a complete set of a Touch event ( began/moved/ended)
+    private var strokes = [UIBezierPath]()
+    private var selectedStrokes = [UIBezierPath]()
+    private var lastTouchLocation: CGPoint?
     
-    func clearSelection() {
-        if !selectedStrokes.isEmpty {
-            selectedStrokes.removeAll()
-            setNeedsDisplay()
-        }
-    }
+    // Variable Constraints for UIImageView
+    var imageViewBottomConstraint: NSLayoutConstraint!
+    var imageViewTopConstraint: NSLayoutConstraint!
+    var imageViewLeadingConstraint: NSLayoutConstraint!
+    var imageViewTrailingConstraint: NSLayoutConstraint!
+    
+    // Privatly used views
+    private var imageView: UIImageView = {
+        let iv = UIImageView()
+        // Predefine rect for minimum scale value
+        iv.frame = CGRect(x: 0, y: 0, width: 1024, height: 768)
+        
+        iv.contentMode = UIImageView.ContentMode.scaleToFill
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        return iv
+    }()
+    
+    private var scrollView: UIScrollView = {
+        let sv = UIScrollView()
+        sv.contentMode = UIScrollView.ContentMode.scaleToFill
+        sv.translatesAutoresizingMaskIntoConstraints = false
+        sv.showsVerticalScrollIndicator = true
+        sv.showsHorizontalScrollIndicator = true
+        return sv
+    }()
+    
+    private let menu = UIMenuController()
+    
+    // MARK: - private drawing properties
+    
+    private var shapes = [[String: UIBezierPath]]()
+    private var lastKey: String?
+    
+    // layer for all paths
+    private lazy var currentShape: CAShapeLayer = {
+        let currentShape = CAShapeLayer()
+        currentShape.fillColor = UIColor.clear.cgColor
+        currentShape.lineWidth = 5
+        currentShape.strokeColor = UIColor.red.cgColor
+        currentShape.lineCap = .round
+        return currentShape
+    }()
+    
+    // Layer for all paths except the last one path
+    private lazy var lastShape: CAShapeLayer = {
+        let lastShape = CAShapeLayer()
+        lastShape.fillColor = UIColor.clear.cgColor
+        lastShape.lineWidth = 5
+        lastShape.lineCap = .round
+        lastShape.strokeColor = UIColor.red.withAlphaComponent(0.6).cgColor
+        return lastShape
+    }()
+    
+    // Layer for selected paths
+    private lazy var selectedShape: CAShapeLayer = {
+        let ss = CAShapeLayer()
+        ss.fillColor = UIColor.clear.cgColor
+        ss.lineWidth = 5
+        ss.lineCap = .square
+        ss.strokeColor = UIColor.red.withAlphaComponent(0.6).cgColor
+        ss.lineDashPattern = [10, 10]
+        return ss
+    }()
 }
 
 // MARK: - ScrollView Delegate methods
