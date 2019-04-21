@@ -472,8 +472,7 @@ extension FreeHandDrawImageView {
     }
 }
 
-// MARK: - Extension for getting a snapshot of the UIImageView
-
+// MARK: - Extension for taking a snapshot of the UIImageView with Free hand drawing
 extension UIImageView {
     var snapshot: UIImage? {
         // Get scale
@@ -492,17 +491,23 @@ extension UIImageView {
     }
 }
 
+//MARK: - CGPoint extension helpers
 extension CGPoint {
+    //Detect UIBezierpaths using touch events by given a  more tolerant path
     func contains(path: UIBezierPath, thresholdWidth: CGFloat = 15, scale: CGFloat = 1) -> Bool {
+        //Create a fat path from the original one
         let fatCGPath = path.cgPath.copy(strokingWithWidth: thresholdWidth / scale, lineCap: CGLineCap.round, lineJoin: CGLineJoin.miter, miterLimit: 1)
         
         let newPath = UIBezierPath(cgPath: fatCGPath)
+        //Now do the hit test
         if newPath.contains(self) {
             return true
         }
         return false
     }
     
+    //Calculate the distance between to points. Here it's used to create a
+    // a threshold for a single touch event ( prevents detecting a continous touch move)
     static func distance(_ a: CGPoint, _ b: CGPoint) -> CGFloat {
         let xDist = a.x - b.x
         let yDist = a.y - b.y
