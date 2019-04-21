@@ -10,12 +10,22 @@ import UIKit
 
 /// Class FreehandDrawImageView
 class FreeHandDrawImageView: UIView {
+    
     // MARK: - Public properties
     
-    var strokeWidth: CGFloat = 4 {
+    var strokeWidth: CGFloat = 8 {
         willSet {
             currentShape.lineWidth = newValue
             lastShape.lineWidth = newValue
+            selectedShape.lineWidth = newValue
+            setNeedsDisplay()
+        }
+    }
+    
+    var selectedLinePattern:[Float]=[10,5]{
+        willSet{
+            selectedShape.lineDashPattern = newValue.map({ NSNumber(value: $0)
+            })
         }
     }
     
@@ -28,14 +38,39 @@ class FreeHandDrawImageView: UIView {
     
     var zoomFactor: CGFloat = 4 {
         willSet {
-            scrollView.maximumZoomScale = newValue > 6 ? 6 : newValue
+            scrollView.maximumZoomScale = newValue > 10 ? 10 : newValue
         }
     }
+    
+   
     
     var originalImage: UIImage? {
         willSet {
             imageView.image = newValue
+            imageView.frame=CGRect(x: 0, y: 0, width: (newValue?.size.width)!, height: (newValue?.size.height)!)
+            refactorDrawingPropertiesOn(imageSize: newValue!.size)
             setNeedsLayout()
+        }
+    }
+    
+    //MARK:- Hardcode drawing properties with different image resolution
+    private func refactorDrawingPropertiesOn(imageSize size:CGSize){
+        switch Float(size.width){
+        case 0...639:
+            strokeWidth=3
+            selectedLinePattern=[6,10]
+        case 640...1023:
+            strokeWidth=6
+            selectedLinePattern=[10,20]
+        case 1024...2047:
+            strokeWidth=16
+            selectedLinePattern=[20,40]
+        case 2048...4095:
+            strokeWidth=64
+            selectedLinePattern=[70,80]
+        default:
+            strokeWidth=80
+            selectedLinePattern=[86,100]
         }
     }
     

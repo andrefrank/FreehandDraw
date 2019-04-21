@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		6706EEEE2261AF9C005C1BEA /* FreeHandDrawImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6706EEED2261AF9C005C1BEA /* FreeHandDrawImageView.swift */; };
+		6708E317226CC37D0071B20C /* ImagePickerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6708E316226CC37D0071B20C /* ImagePickerService.swift */; };
 		673CC497226123F30094AEED /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 673CC496226123F30094AEED /* AppDelegate.swift */; };
 		673CC499226123F30094AEED /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 673CC498226123F30094AEED /* ViewController.swift */; };
 		673CC49C226123F30094AEED /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 673CC49A226123F30094AEED /* Main.storyboard */; };
@@ -17,6 +18,7 @@
 
 /* Begin PBXFileReference section */
 		6706EEED2261AF9C005C1BEA /* FreeHandDrawImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeHandDrawImageView.swift; sourceTree = "<group>"; };
+		6708E316226CC37D0071B20C /* ImagePickerService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePickerService.swift; sourceTree = "<group>"; };
 		673CC493226123F30094AEED /* FreehandDraw.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FreehandDraw.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		673CC496226123F30094AEED /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		673CC498226123F30094AEED /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -60,6 +62,7 @@
 				673CC498226123F30094AEED /* ViewController.swift */,
 				673CC49A226123F30094AEED /* Main.storyboard */,
 				6706EEED2261AF9C005C1BEA /* FreeHandDrawImageView.swift */,
+				6708E316226CC37D0071B20C /* ImagePickerService.swift */,
 				673CC49D226123F40094AEED /* Assets.xcassets */,
 				673CC49F226123F40094AEED /* LaunchScreen.storyboard */,
 				673CC4A2226123F40094AEED /* Info.plist */,
@@ -139,6 +142,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				673CC499226123F30094AEED /* ViewController.swift in Sources */,
+				6708E317226CC37D0071B20C /* ImagePickerService.swift in Sources */,
 				6706EEEE2261AF9C005C1BEA /* FreeHandDrawImageView.swift in Sources */,
 				673CC497226123F30094AEED /* AppDelegate.swift in Sources */,
 			);
