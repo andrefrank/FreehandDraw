@@ -26,6 +26,7 @@ class ViewController: UIViewController {
     @IBAction func snapShot(_ sender: Any) {
        
         imageView.zoomFactor=5
+
     }
     
 }

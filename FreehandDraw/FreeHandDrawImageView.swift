@@ -509,3 +509,39 @@ extension CGPoint {
         return CGFloat(sqrt(xDist * xDist + yDist * yDist))
     }
 }
+
+extension UIImage {
+    func croppedInRect(rect: CGRect) -> UIImage {
+        func rad(_ degree: Double) -> CGFloat {
+            return CGFloat(degree / 180.0 * .pi)
+        }
+        
+        var rectTransform: CGAffineTransform
+        switch imageOrientation {
+        case .left:
+            rectTransform = CGAffineTransform(rotationAngle: rad(90)).translatedBy(x: 0, y: -self.size.height)
+        case .right:
+            rectTransform = CGAffineTransform(rotationAngle: rad(-90)).translatedBy(x: -self.size.width, y: 0)
+        case .down:
+            rectTransform = CGAffineTransform(rotationAngle: rad(-180)).translatedBy(x: -self.size.width, y: -self.size.height)
+        default:
+            rectTransform = .identity
+        }
+        rectTransform = rectTransform.scaledBy(x: self.scale, y: self.scale)
+        
+        let imageRef = self.cgImage!.cropping(to: rect.applying(rectTransform))
+        let result = UIImage(cgImage: imageRef!, scale: self.scale, orientation: self.imageOrientation)
+        return result
+    }
+    
+    func croppedInScrollView(scrollView:UIScrollView,imageView:UIImageView)->UIImage{
+        let ratio = imageView.image!.size.height / scrollView.contentSize.height
+        let origin = CGPoint(x: scrollView.contentOffset.x * ratio, y: scrollView.contentOffset.y * ratio)
+
+        let size = CGSize(width: scrollView.bounds.size.width * ratio,height: scrollView.bounds.size.height * ratio)
+        let cropFrame = CGRect(origin: origin, size: size)
+        let croppedImage = imageView.image!.croppedInRect(rect: cropFrame)
+        return croppedImage
+    }
+    
+}
